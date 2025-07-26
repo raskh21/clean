@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Sauberkeitsplan | Rasekh & AI</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      direction: ltr;
+      text-align: center;
+      background-color: #f9f9f9;
+    }
+    header {
+      background-color: #0077cc;
+      color: white;
+      padding: 15px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .nav-buttons {
+      margin: 20px 0;
+    }
+    .nav-buttons button {
+      margin: 0 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .page {
+      display: none;
+      padding: 20px;
+    }
+    .active {
+      display: block;
+    }
+    form {
+      max-width: 400px;
+      margin: auto;
+      text-align: left;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+    #registeredList {
+      margin-top: 20px;
+      list-style: none;
+      padding: 0;
+      text-align: left;
+    }
+    #registeredList li {
+      background-color: #eef;
+      padding: 8px;
+      margin-bottom: 5px;
+      border-radius: 6px;
+    }
+    .task-item {
+      display: block;
+      margin-bottom: 10px;
+      text-align: left;
+    }
+    .task-item input[type="checkbox"] {
+      margin-right: 0;
+    }
+    .task-item label {
+      display: flex;
+      align-items: center;
+    }
+    .task-item span {
+      margin-left: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>Sauberkeitsplan | Rasekh & AI</header>
+
+  <div class="nav-buttons">
+    <button onclick="showPage('weekPage')">🗓️ Woche auswählen</button>
+    <button onclick="showPage('tasksPage')">📋 Aufgaben erledigen</button>
+    <button onclick="showPage('settingsPage')">⚙️ Einstellungen</button>
+  </div>
+
+  <!-- Seite zur Wochenauswahl -->
+  <div id="weekPage" class="page active">
+    <h2>🗓️ Woche auswählen</h2>
+
+    <form id="weekForm" onsubmit="registerWeek(); return false;">
+      <label for="studentName">Name des Studenten:</label>
+      <input type="text" id="studentName" required>
+
+      <label for="yearSelect">Jahr:</label>
+      <select id="yearSelect" required>
+        <option value="2023">2023</option>
+        <option value="2024">2024</option>
+        <option value="2025">2025</option>
+        <option value="2026">2026</option>
+        <option value="2027">2027</option>
+        <option value="2028">2028</option>
+        <option value="2029">2029</option>
+        <option value="2030">2030</option>
+      </select>
+
+      <label for="monthSelect">Monat:</label>
+      <select id="monthSelect" required>
+        <option value="Januar">Januar</option>
+        <option value="Februar">Februar</option>
+        <option value="März">März</option>
+        <option value="April">April</option>
+        <option value="Mai">Mai</option>
+        <option value="Juni">Juni</option>
+        <option value="Juli">Juli</option>
+        <option value="August">August</option>
+        <option value="September">September</option>
+        <option value="Oktober">Oktober</option>
+        <option value="November">November</option>
+        <option value="Dezember">Dezember</option>
+      </select>
+
+      <label for="weekSelect">Woche (mit Datumsbereich):</label>
+      <select id="weekSelect" required>
+        <option value="Woche 1 (1 bis 7)">Woche 1 (1 bis 7)</option>
+        <option value="Woche 2 (8 bis 14)">Woche 2 (8 bis 14)</option>
+        <option value="Woche 3 (15 bis 21)">Woche 3 (15 bis 21)</option>
+        <option value="Woche 4 (22 bis Ende)">Woche 4 (22 bis Ende)</option>
+      </select>
+
+      <button type="submit">📌 Woche registrieren</button>
+    </form>
+
+    <h3>📋 Registrierte Wochen:</h3>
+    <ul id="registeredList"></ul>
+  </div>
+
+  <!-- Seite zur Aufgabenerledigung -->
+  <div id="tasksPage" class="page">
+    <h2>📋 Aufgaben erledigen</h2>
+    <form id="tasksForm">
+      <div id="tasksList"></div>
+      <button type="button" onclick="saveTasks()">💾 Aufgaben speichern</button>
+    </form>
+  </div>
+
+  <!-- Einstellungen Seite -->
+  <div id="settingsPage" class="page">
+    <h2>⚙️ Einstellungen</h2>
+    <form id="settingsForm" onsubmit="saveSettings(); return false;">
+      <label for="whatsappGroupLink">WhatsApp Gruppenlink:</label>
+      <input type="text" id="whatsappGroupLink">
+
+      <label for="tasksDescription">Liste der Aufgabenbeschreibungen:</label>
+      <textarea id="tasksDescription" rows="10" required></textarea>
+
+      <button type="submit">💾 Einstellungen speichern</button>
+    </form>
+  </div>
+
+  <script>
+    let tasks = [];
+    let settings = {
+      whatsappGroupLink: '',
+      tasksDescription: ''
+    };
+
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+    }
+
+    function registerWeek() {
+      const name = document.getElementById('studentName').value;
+      const year = document.getElementById('yearSelect').value;
+      const month = document.getElementById('monthSelect').value;
+      const week = document.getElementById('weekSelect').value;
+
+      const item = document.createElement('li');
+      item.textContent = `✅ ${week} aus dem Monat ${month} des Jahres ${year} wurde von ${name} ausgewählt`;
+      document.getElementById('registeredList').appendChild(item);
+
+      document.getElementById('weekForm').reset();
+    }
+
+    function loadTasks() {
+      const tasksList = document.getElementById('tasksList');
+      tasksList.innerHTML = '';
+      const tasksDescription = settings.tasksDescription.split('\n');
+      tasksDescription.forEach((description, index) => {
+        if (description.trim() === '') return;
+        const taskItem = document.createElement('div');
+        taskItem.className = 'task-item';
+        taskItem.innerHTML = `
+          <label>
+            <input type="checkbox" id="task-${index}" onchange="updateTaskDate(${index})">
+            <span>${description}</span>
+            <span id="task-date-${index}"></span>
+          </label>
+        `;
+        tasksList.appendChild(taskItem);
+      });
+    }
+
+    function updateTaskDate(index) {
+      const checkbox = document.getElementById(`task-${index}`);
+      const dateSpan = document.getElementById(`task-date-${index}`);
+      if (checkbox.checked) {
+        const now = new Date();
+        const dateString = now.toLocaleDateString('de-DE');
+        dateSpan.textContent = dateString;
+      } else {
+        dateSpan.textContent = '';
+      }
+    }
+
+    function saveTasks() {
+      const whatsappGroupLink = settings.whatsappGroupLink;
+      if (!whatsappGroupLink) {
+        alert('Bitte geben Sie den WhatsApp Gruppenlink in den Einstellungen ein.');
+        return;
+      }
+
+      const tasksText = Array.from(document.querySelectorAll('.task-item')).map(taskItem => {
+        const description = taskItem.querySelector('span').textContent;
+        const date = taskItem.querySelector('input[type="checkbox"]').checked ?
+          'Erledigt am ' + taskItem.querySelectorAll('span')[1].textContent :
+          'Nicht erledigt';
+        return `${description} - ${date}`;
+      }).join('\n');
+
+      const whatsappMessage = encodeURIComponent(`Liste der Aufgaben:\n${tasksText}`);
+      const whatsappURL = `${whatsappGroupLink}&text=${whatsappMessage}`;
+      window.open(whatsappURL, '_blank');
+    }
+
+    function saveSettings() {
+      settings.whatsappGroupLink = document.getElementById('whatsappGroupLink').value;
+      settings.tasksDescription = document.getElementById('tasksDescription').value;
+
+      // Save settings to localStorage
+      localStorage.setItem('settings', JSON.stringify(settings));
+
+      loadTasks();
+      alert('Einstellungen erfolgreich gespeichert.');
+    }
+
+    // Initialisierung
+    document.addEventListener('DOMContentLoaded', () => {
+      // Laden der Standardeinstellungen (falls vorhanden)
+      if (localStorage.getItem('settings')) {
+        settings = JSON.parse(localStorage.getItem('settings'));
+        document.getElementById('whatsappGroupLink').value = settings.whatsappGroupLink;
+        document.getElementById('tasksDescription').value = settings.tasksDescription;
+        loadTasks();
+      }
+    });
+  </script>
+
+</body>
+</html>
