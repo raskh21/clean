@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Sauberkeitsplan | Rasekh & AI</title>
+  <title>Cleaning Plan | Rasekh & AI</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -82,23 +82,23 @@
 </head>
 <body>
 
-  <header>Sauberkeitsplan | Rasekh & AI</header>
+  <header>Cleaning Plan | Rasekh & AI</header>
 
   <div class="nav-buttons">
-    <button onclick="showPage('weekPage')">🗓️ Woche auswählen</button>
-    <button onclick="showPage('tasksPage')">📋 Aufgaben erledigen</button>
-    <button onclick="showPage('settingsPage')">⚙️ Einstellungen</button>
+    <button onclick="showPage('weekPage')">🗓️ Planning</button>
+    <button onclick="showPage('tasksPage')">📋 Complete Tasks</button>
+    <button onclick="showPage('settingsPage')">⚙️ Settings</button>
   </div>
 
-  <!-- Seite zur Wochenauswahl -->
+  <!-- Planning Page -->
   <div id="weekPage" class="page active">
-    <h2>🗓️ Woche auswählen</h2>
+    <h2>🗓️ Planning</h2>
 
     <form id="weekForm" onsubmit="registerWeek(); return false;">
-      <label for="studentName">Name des Studenten:</label>
+      <label for="studentName">Student Name:</label>
       <input type="text" id="studentName" required>
 
-      <label for="yearSelect">Jahr:</label>
+      <label for="yearSelect">Year:</label>
       <select id="yearSelect" required>
         <option value="2023">2023</option>
         <option value="2024">2024</option>
@@ -110,158 +110,427 @@
         <option value="2030">2030</option>
       </select>
 
-      <label for="monthSelect">Monat:</label>
+      <label for="monthSelect">Month:</label>
       <select id="monthSelect" required>
-        <option value="Januar">Januar</option>
-        <option value="Februar">Februar</option>
-        <option value="März">März</option>
+        <option value="January">January</option>
+        <option value="February">February</option>
+        <option value="March">March</option>
         <option value="April">April</option>
-        <option value="Mai">Mai</option>
-        <option value="Juni">Juni</option>
-        <option value="Juli">Juli</option>
+        <option value="May">May</option>
+        <option value="June">June</option>
+        <option value="July">July</option>
         <option value="August">August</option>
         <option value="September">September</option>
-        <option value="Oktober">Oktober</option>
+        <option value="October">October</option>
         <option value="November">November</option>
-        <option value="Dezember">Dezember</option>
+        <option value="December">December</option>
       </select>
 
-      <label for="weekSelect">Woche (mit Datumsbereich):</label>
-      <select id="weekSelect" required>
-        <option value="Woche 1 (1 bis 7)">Woche 1 (1 bis 7)</option>
-        <option value="Woche 2 (8 bis 14)">Woche 2 (8 bis 14)</option>
-        <option value="Woche 3 (15 bis 21)">Woche 3 (15 bis 21)</option>
-        <option value="Woche 4 (22 bis Ende)">Woche 4 (22 bis Ende)</option>
-      </select>
+      <div id="weekContainer">
+        <label for="weekSelect">Week (with date range):</label>
+        <select id="weekSelect" required>
+          <option value="Week 1 (1 to 7)">Week 1 (1 to 7)</option>
+          <option value="Week 2 (8 to 14)">Week 2 (8 to 14)</option>
+          <option value="Week 3 (15 to 21)">Week 3 (15 to 21)</option>
+          <option value="Week 4 (22 to end)">Week 4 (22 to end)</option>
+        </select>
+      </div>
 
-      <button type="submit">📌 Woche registrieren</button>
+      <div id="dayContainer" style="display: none;">
+        <label for="daySelect">Day:</label>
+        <select id="daySelect" required>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+          <option value="13">13</option>
+          <option value="14">14</option>
+          <option value="15">15</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+          <option value="19">19</option>
+          <option value="20">20</option>
+          <option value="21">21</option>
+          <option value="22">22</option>
+          <option value="23">23</option>
+          <option value="24">24</option>
+          <option value="25">25</option>
+          <option value="26">26</option>
+          <option value="27">27</option>
+          <option value="28">28</option>
+          <option value="29">29</option>
+          <option value="30">30</option>
+          <option value="31">31</option>
+        </select>
+      </div>
+
+      <div id="taskTypeContainer" style="display: none;">
+        <label for="taskTypeSelect">Task Type:</label>
+        <select id="taskTypeSelect" required>
+          <!-- Options will be populated dynamically -->
+        </select>
+      </div>
+
+      <button type="submit">📌 Register</button>
     </form>
 
-    <h3>📋 Registrierte Wochen:</h3>
+    <h3>📋 Registered Weeks/Days:</h3>
     <ul id="registeredList"></ul>
   </div>
 
-  <!-- Seite zur Aufgabenerledigung -->
+  <!-- Task Completion Page -->
   <div id="tasksPage" class="page">
-    <h2>📋 Aufgaben erledigen</h2>
+    <h2>📋 Complete Tasks</h2>
     <form id="tasksForm">
       <div id="tasksList"></div>
-      <button type="button" onclick="saveTasks()">💾 Aufgaben speichern</button>
+      <button type="button" onclick="saveTasks()">💾 Save Tasks</button>
     </form>
   </div>
 
-  <!-- Einstellungen Seite -->
+  <!-- Settings Page -->
   <div id="settingsPage" class="page">
-    <h2>⚙️ Einstellungen</h2>
+    <h2>⚙️ Settings</h2>
     <form id="settingsForm" onsubmit="saveSettings(); return false;">
-      <label for="whatsappGroupLink">WhatsApp Gruppenlink:</label>
+      <label for="cleaningType">Cleaning Type:</label>
+      <select id="cleaningType" required onchange="updateFormBasedOnCleaningType()">
+        <option value="weekly">Weekly Cleaning</option>
+        <option value="daily">Daily Cleaning</option>
+      </select>
+
+      <label for="whatsappGroupLink">WhatsApp Group Link:</label>
       <input type="text" id="whatsappGroupLink">
 
-      <label for="tasksDescription">Liste der Aufgabenbeschreibungen:</label>
+      <label for="tasksDescription">List of Task Descriptions:</label>
       <textarea id="tasksDescription" rows="10" required></textarea>
 
-      <button type="submit">💾 Einstellungen speichern</button>
+      <button type="submit">💾 Save Settings</button>
     </form>
   </div>
 
   <script>
+    // Database variables
+    let db;
+    const DB_NAME = 'CleaningPlanDB';
+    const DB_VERSION = 1;
+    
+    // Data structure remains the same
     let tasks = [];
     let settings = {
       whatsappGroupLink: '',
-      tasksDescription: ''
+      tasksDescription: '',
+      cleaningType: 'weekly'
     };
 
+    // Initialize IndexedDB
+    function initDB() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+        
+        request.onerror = (event) => {
+          console.error("Database error:", event.target.error);
+          reject(event.target.error);
+        };
+        
+        request.onupgradeneeded = (event) => {
+          const db = event.target.result;
+          if (!db.objectStoreNames.contains('settings')) {
+            db.createObjectStore('settings', { keyPath: 'id' });
+          }
+          if (!db.objectStoreNames.contains('registrations')) {
+            db.createObjectStore('registrations', { keyPath: 'id', autoIncrement: true });
+          }
+          if (!db.objectStoreNames.contains('completedTasks')) {
+            db.createObjectStore('completedTasks', { keyPath: 'id', autoIncrement: true });
+          }
+        };
+        
+        request.onsuccess = (event) => {
+          db = event.target.result;
+          resolve(db);
+        };
+      });
+    }
+
+    // Save data to IndexedDB
+    async function saveToDB(storeName, data) {
+      if (!db) await initDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(storeName, 'readwrite');
+        const store = tx.objectStore(storeName);
+        const request = store.put(data);
+        
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = (event) => reject(event.target.error);
+      });
+    }
+
+    // Get data from IndexedDB
+    async function getFromDB(storeName, id) {
+      if (!db) await initDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(storeName, 'readonly');
+        const store = tx.objectStore(storeName);
+        const request = store.get(id);
+        
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = (event) => reject(event.target.error);
+      });
+    }
+
+    // Get all data from IndexedDB
+    async function getAllFromDB(storeName) {
+      if (!db) await initDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(storeName, 'readonly');
+        const store = tx.objectStore(storeName);
+        const request = store.getAll();
+        
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = (event) => reject(event.target.error);
+      });
+    }
+
+    // Original functions remain the same, just update the storage parts
     function showPage(pageId) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.getElementById(pageId).classList.add('active');
     }
 
-    function registerWeek() {
-      const name = document.getElementById('studentName').value;
-      const year = document.getElementById('yearSelect').value;
-      const month = document.getElementById('monthSelect').value;
-      const week = document.getElementById('weekSelect').value;
+    function updateFormBasedOnCleaningType() {
+      const cleaningType = document.getElementById('cleaningType').value;
+      const weekContainer = document.getElementById('weekContainer');
+      const dayContainer = document.getElementById('dayContainer');
+      const taskTypeContainer = document.getElementById('taskTypeContainer');
 
-      const item = document.createElement('li');
-      item.textContent = `✅ ${week} aus dem Monat ${month} des Jahres ${year} wurde von ${name} ausgewählt`;
-      document.getElementById('registeredList').appendChild(item);
-
-      document.getElementById('weekForm').reset();
+      if (cleaningType === 'weekly') {
+        weekContainer.style.display = 'block';
+        dayContainer.style.display = 'none';
+        taskTypeContainer.style.display = 'none';
+      } else {
+        weekContainer.style.display = 'none';
+        dayContainer.style.display = 'block';
+        taskTypeContainer.style.display = 'block';
+        populateTaskTypes();
+      }
     }
 
-    function loadTasks() {
+    function populateTaskTypes() {
+      const taskTypeSelect = document.getElementById('taskTypeSelect');
+      taskTypeSelect.innerHTML = '';
+      const tasksDescription = settings.tasksDescription.split('\n');
+
+      tasksDescription.forEach((description) => {
+        if (description.trim() !== '') {
+          const option = document.createElement('option');
+          option.value = description.trim();
+          option.textContent = description.trim();
+          taskTypeSelect.appendChild(option);
+        }
+      });
+    }
+
+    async function registerWeek() {
+  const name = document.getElementById('studentName').value;
+  const year = document.getElementById('yearSelect').value;
+  const month = document.getElementById('monthSelect').value;
+  const cleaningType = document.getElementById('cleaningType').value;
+
+  let itemText = '';
+  let weekOrDay = '';
+  let taskType = '';
+
+  if (cleaningType === 'weekly') {
+    weekOrDay = document.getElementById('weekSelect').value;
+    itemText = `✅ ${weekOrDay} from the month of ${month} in the year ${year} was selected by ${name} for weekly cleaning`;
+  } else {
+    weekOrDay = document.getElementById('daySelect').value;
+    taskType = document.getElementById('taskTypeSelect').value;
+    itemText = `✅ Day ${weekOrDay} from the month of ${month} in the year ${year} was selected by ${name} for ${taskType}`;
+  }
+
+  // Save to IndexedDB
+  await saveToDB('registrations', {
+    data: itemText,
+    timestamp: Date.now(),
+    name,
+    year,
+    month,
+    type: cleaningType
+  });
+
+  // ارسال به Google Sheets
+  fetch("https://script.google.com/macros/s/AKfycbzJs1TWWfFVPYaTu_NtokAVTyQqn_A2Iij0WTRKsGMJt7JnHOl7aqI0_opJapTxxS9hvw/exec", {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      ID: Date.now().toString(),
+      StudentName: name,
+      Year: year,
+      Month: month,
+      WeekOrDay: weekOrDay,
+      TaskType: taskType,
+      Timestamp: new Date().toISOString(),
+      Notes: ''
+    })
+  });
+
+  // نمایش در لیست
+  const item = document.createElement('li');
+  item.textContent = itemText;
+  document.getElementById('registeredList').appendChild(item);
+
+  document.getElementById('weekForm').reset();
+}
+
+	
+    async function loadTasks() {
       const tasksList = document.getElementById('tasksList');
       tasksList.innerHTML = '';
       const tasksDescription = settings.tasksDescription.split('\n');
+      
+      // Load completed tasks from IndexedDB
+      const completedTasks = await getAllFromDB('completedTasks');
+      
       tasksDescription.forEach((description, index) => {
         if (description.trim() === '') return;
+        
+        const taskId = `task-${index}`;
+        const completedTask = completedTasks.find(t => t.taskId === taskId);
+        
         const taskItem = document.createElement('div');
         taskItem.className = 'task-item';
         taskItem.innerHTML = `
           <label>
-            <input type="checkbox" id="task-${index}" onchange="updateTaskDate(${index})">
+            <input type="checkbox" id="${taskId}" 
+                   ${completedTask ? 'checked' : ''} 
+                   onchange="updateTaskDate(${index})">
             <span>${description}</span>
-            <span id="task-date-${index}"></span>
+            <span id="task-date-${index}">${completedTask ? completedTask.completionDate : ''}</span>
           </label>
         `;
         tasksList.appendChild(taskItem);
       });
     }
 
-    function updateTaskDate(index) {
-      const checkbox = document.getElementById(`task-${index}`);
+    async function updateTaskDate(index) {
+      const taskId = `task-${index}`;
+      const checkbox = document.getElementById(taskId);
       const dateSpan = document.getElementById(`task-date-${index}`);
+      
       if (checkbox.checked) {
         const now = new Date();
-        const dateString = now.toLocaleDateString('de-DE');
+        const dateString = now.toLocaleDateString('en-US');
         dateSpan.textContent = dateString;
+        
+        // Save to IndexedDB
+        await saveToDB('completedTasks', {
+          taskId,
+          description: settings.tasksDescription.split('\n')[index].trim(),
+          completionDate: dateString,
+          timestamp: Date.now()
+        });
       } else {
         dateSpan.textContent = '';
+        
+        // Remove from completed tasks (would need to implement delete functionality)
       }
     }
+// ارسال اطلاعات به Google Sheet
+fetch("https://script.google.com/macros/s/AKfycbzJs1TWWfFVPYaTu_NtokAVTyQqn_A2Iij0WTRKsGMJt7JnHOl7aqI0_opJapTxxS9hvw/exec", {
+  method: "POST",
+  mode: "no-cors",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    ID: Date.now().toString(), // یا هر شناسه دلخواه
+    StudentName: name,
+    Year: year,
+    Month: month,
+    WeekOrDay: cleaningType === 'weekly' ? document.getElementById('weekSelect').value : document.getElementById('daySelect').value,
+    TaskType: cleaningType === 'daily' ? document.getElementById('taskTypeSelect').value : '',
+    Timestamp: new Date().toISOString(),
+    Notes: ''
+  })
+});
 
-    function saveTasks() {
+
+    async function saveTasks() {
       const whatsappGroupLink = settings.whatsappGroupLink;
       if (!whatsappGroupLink) {
-        alert('Bitte geben Sie den WhatsApp Gruppenlink in den Einstellungen ein.');
+        alert('Please enter the WhatsApp group link in the settings.');
         return;
       }
 
-      const tasksText = Array.from(document.querySelectorAll('.task-item')).map(taskItem => {
-        const description = taskItem.querySelector('span').textContent;
-        const date = taskItem.querySelector('input[type="checkbox"]').checked ?
-          'Erledigt am ' + taskItem.querySelectorAll('span')[1].textContent :
-          'Nicht erledigt';
-        return `${description} - ${date}`;
+      const completedTasks = await getAllFromDB('completedTasks');
+      const tasksText = completedTasks.map(task => {
+        return `${task.description} - Completed on ${task.completionDate}`;
       }).join('\n');
 
-      const whatsappMessage = encodeURIComponent(`Liste der Aufgaben:\n${tasksText}`);
+      const whatsappMessage = encodeURIComponent(`List of tasks:\n${tasksText}`);
       const whatsappURL = `${whatsappGroupLink}&text=${whatsappMessage}`;
       window.open(whatsappURL, '_blank');
     }
 
-    function saveSettings() {
+    async function saveSettings() {
       settings.whatsappGroupLink = document.getElementById('whatsappGroupLink').value;
       settings.tasksDescription = document.getElementById('tasksDescription').value;
+      settings.cleaningType = document.getElementById('cleaningType').value;
 
-      // Save settings to localStorage
-      localStorage.setItem('settings', JSON.stringify(settings));
+      // Save to IndexedDB
+      await saveToDB('settings', { id: 1, ...settings });
 
-      loadTasks();
-      alert('Einstellungen erfolgreich gespeichert.');
+      updateFormBasedOnCleaningType();
+      await loadTasks();
+      alert('Settings saved successfully.');
     }
 
-    // Initialisierung
-    document.addEventListener('DOMContentLoaded', () => {
-      // Laden der Standardeinstellungen (falls vorhanden)
-      if (localStorage.getItem('settings')) {
-        settings = JSON.parse(localStorage.getItem('settings'));
-        document.getElementById('whatsappGroupLink').value = settings.whatsappGroupLink;
-        document.getElementById('tasksDescription').value = settings.tasksDescription;
-        loadTasks();
+    // Load all data on startup
+    async function loadAllData() {
+      // Load settings
+      const savedSettings = await getFromDB('settings', 1);
+      if (savedSettings) {
+        Object.assign(settings, savedSettings);
+        document.getElementById('whatsappGroupLink').value = settings.whatsappGroupLink || '';
+        document.getElementById('tasksDescription').value = settings.tasksDescription || '';
+        document.getElementById('cleaningType').value = settings.cleaningType || 'weekly';
+        updateFormBasedOnCleaningType();
+      }
+      
+      // Load registrations
+      const registrations = await getAllFromDB('registrations');
+      const registeredList = document.getElementById('registeredList');
+      registrations.forEach(reg => {
+        const item = document.createElement('li');
+        item.textContent = reg.data;
+        registeredList.appendChild(item);
+      });
+      
+      // Load tasks
+      await loadTasks();
+    }
+
+    // Initialize the app
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        await initDB();
+        await loadAllData();
+      } catch (error) {
+        console.error("Error initializing app:", error);
       }
     });
   </script>
-
 </body>
 </html>
